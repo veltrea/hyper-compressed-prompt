@@ -53,81 +53,12 @@ WinNativeSSHとancdbの同時リリースは、単に2つのツールを披露�
 **シンボリック・トークン圧縮**の効果を実証するため、従来の冗長な仕様書（戦略レベル）と、本プロジェクトで実際に使用された圧縮済みのシンボリック形式（発色後のログより抽出）の比較を以下に示します。
 
 ### 1. 圧縮前（戦略レベルの仕様）
-*膨大な自然言語（約15,000トークン）による詳細仕様書。全文は [VERBOSE_SPEC.md](VERBOSE_SPEC.md)（英語版）を参照してください。*
-
-```markdown
-# AI-Native Core Database (ANC-DB) 詳細仕様書 v1.0
-...
-```
+*膨大な自然言語（約15,000トークン）による詳細仕様書。*
+- **証拠資料全文**: [original.md](original.md)
 
 ### 2. 圧縮後（実際の発色プロンプト）
 *AIが「 Synthesis（統合）」を実行するために使用された実際のシンボリック・プロンプト（約850トークン / 94.3% 削減）。この高密度な形式により、わずか24時間での複数プロジェクト同時完遂が可能となりました。*
-
-```text
-## ANC-DB.v1::SPEC_COMPRESSED
-# AI-OPTIMIZED: MAX_COMPRESSION, ZERO_REDUNDANCY, SYMBOL_MODE
-
-### META
-ID: ANCDB
-V: 1.0
-TGT: AI_AGENT_STATE_MGT
-PRIO: [TOK_MIN, LATENCY_MIN, MEM_SAFE]
-SCALE: 1PROC_NTHREAD
-
-### ARCH::3LAYER
-L3:PROTO[msgpack|stdin/tcp]->L2:RUST[ffi_safe]->L1:SQLITE_CORE[btree+pager]
-MEM: 50KB+200KB+500KB=750KB
-
-### CORE_EXTRACT::SQLITE
-SRC: sqlite3.c (8MB)
-TGT: 500KB (94%↓)
-
-KEEP: {
-  btree: [Open,Close,BeginTx,Commit,Rollback,Cursor,MoveTo,Data,Insert,Delete,CreateTbl]
-  pager: [Open,Close,Get,Write,CommitP1,CommitP2,Rollback]
-  vfs: [Open,Close,Read,Write,Sync]
-  util: [malloc,free]
-}
-
-DROP: [parse.y,tokenize.c,prepare.c,expr.c,select.c,where.c,vdbe.c]
-
-FLAGS: -DSQLITE_OMIT_{AUTH,AUTOINIT,COMPLETE,DEPRECATED,EXPLAIN,LOAD_EXT,PROGRESS,UTF16,VTAB,WINDOW} -O3
-
-### SCHEMA::RUST
-#[derive(Schema)]
-struct T{
-  #[pk]id:u64,
-  #[idx]ts:i64,
-  aid:String,
-  #[cmp]c:Vec<u8>,
-  emb:Option<Vec<f32>>
-}
-// AUTO_GEN: btree_layout,serde,idx_meta
-
-PK_STRAT: snowflake_id(41b_ts+10b_mid+12b_seq)
-IDX_TYPE: [BTree,Hash,FullText?]
-
-### PROTO::BINARY
-FMT: [CMD:u8][SCHEMA_ID][PAYLOAD:msgpack]
-
-CMD_TABLE:
-0x01:DirectRead(tid,key)->rec
-0x02:RangeScan(tid,idx,start,end,lim,ord)->recs
-0x03:AtomicWrite(tid,key,data)->ok
-0x04:BatchWrite(tid,recs[],on_conflict)->ok
-0x05:AtomicUpdate(tid,key,delta)->ok
-0x06:Delete(tid,key)->ok
-0x10:BeginTx(iso_lvl)->txid
-0x11:CommitTx(txid)->ok
-0x12:RollbackTx(txid)->ok
-
-RESP: {st:u8,dat:bin,meta:{rows:u32,us:u32},err:str?}
-
-TOK_REDUCTION:
-SQL_INSERT(1000recs): ~1500tok, 50ms
-ANCDB_0x04: ~0tok, 5ms
-IMPROVE: 99.7%↓, 10x↑
-```
+- **証拠資料全文**: [compress.md](compress.md)
 
 ---
 © 2026 veltrea. All rights reserved.
