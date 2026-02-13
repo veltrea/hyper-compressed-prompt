@@ -29,6 +29,13 @@ The following two projects were developed simultaneously from scratch to a funct
 
 To maximize the AI's reasoning capabilities, technical specifications were compressed into an assembler-like symbolic format. This achieved a **15x-20x reduction in token usage**, allowing the AI to maintain the complex logic of two distinct projects within its active context without "forgetting" or hallucinating. By bypassing ambiguous natural language and providing high-density structured data directly, we **eliminated semantic drift and shortened the feedback loop by 90%**.
 
+### 3.2 AI Agent Stack
+
+In the synthesis process of this project, the following AI stack was strategically utilized:
+
+- **Compression**: **Anthropic Claude 3.5 Sonnet**. Used to transform long-form Japanese specifications into high-density symbolic prompts.
+- **Code Generation**: **OpenAI Codex** and **Google Antigravity**. These engines interpreted the compressed prompts to generate high-performance Rust, C, and C++ code with extreme speed and precision.
+
 ---
 
 ## 4. Conclusion: Strategic Value
