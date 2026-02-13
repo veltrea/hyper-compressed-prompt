@@ -50,25 +50,40 @@ The concurrent release of **WinNativeSSH** and **ancdb** is not merely a showcas
 
 ## Annex: Token Compression Examples
 
-To illustrate the effectiveness of **Symbolic Token Compression**, below is a comparison between a standard verbose specification and the actual compressed symbolic version used in the project (sourced from operational logs).
+To illustrate the effectiveness of **Symbolic Token Compression**, below is a comparison between the original detailed specification and the actual compressed symbolic version used in the project.
 
-### 1. Before Compression (Original Strategy)
-*Standard natural language specification with redundant terminology and complex diagrams (~15,000 tokens).*
+### 1. Before Compression (Original Detailed Specification)
+*A snippet of the massive natural language specification (~15,000 tokens) documenting every architectural layer and dependency.*
 
 ```markdown
 # AI-Native Core Database (ANC-DB) Detailed Specification v1.0
 
-**Design Philosophy**
-AI-Native Core Database (ANC-DB) is a next-generation storage engine that completely eliminates the SQL "human language parsing layer." It allows AI agents to operate data directly from programs or via binary communication with minimal token usage and maximum reliability.
+**Executive Summary**
+ANC-DB is a next-generation storage engine that completely eliminates the SQL "human language parsing layer." It allows AI agents to operate data directly from programs or via binary communication with minimal token usage and maximum reliability.
 
-### Core Architecture
-1. Zero SQL Overhead: Zero parsing cost, enabling response times close to AI thinking speed.
-2. Token Minimization: AI operations can be described with minimal token counts.
-...
+### 1. System Architecture
+#### 1.1 Three-Layer Design
+- AI Binary Protocol Layer: MessagePack/Protobuf over stdio/TCP
+- Rust Safety Layer: Memory-safe wrapper with Arc/Mutex
+- SQLite Core Engine: B-Tree (sans SQL parser), Pager (ACID), VFS (I/O)
+
+### 2. Data Model Design
+#### 2.1 Schema Definition (Rust)
+```rust
+#[derive(Schema, Serialize, Deserialize)]
+struct AgentMemory {
+    #[primary_key] id: u64,
+    #[indexed] timestamp: i64,
+    agent_id: String,
+    #[compressed] content: Vec<u8>,
+    embedding: Option<Vec<f32>>,
+}
+```
+... (continues for 20,000+ characters)
 ```
 
 ### 2. After Compression (Actual Symbolic Prompt)
-*The actual emitted (发色) prompt used for development (~850 tokens, 94.3% reduction). This format enabled the parallel synthesis of complex systems.*
+*The actual emitted (发色) prompt used for the 24-hour parallel synthesis (~850 tokens, 94.3% reduction).*
 
 ```text
 ## ANC-DB.v1::SPEC_COMPRESSED
