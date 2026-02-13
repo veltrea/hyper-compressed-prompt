@@ -10,7 +10,7 @@
 
 ## 1. Abstract
 
-This report demonstrates a paradigm shift in software engineering: the transition from human-centric development to **"AI-Native Synthesis."** By utilizing **Symbolic Token Compression** and the **ANC-DB** architecture, we present a methodology that dramatically accelerates the design-to-implementation pipeline. As a proof of concept, multiple distinct projects (such as WinNativeSSH and ancdb) were developed concurrently within a single 24-hour window, reaching production-ready quality.
+This report demonstrates a paradigm shift in software engineering: the transition from human-centric development to **"AI-Native Synthesis."** Centered on the methodology of **"Symbolic Token Compression,"** we present a practical approach to dramatically accelerate the design-to-implementation pipeline. As a proof of concept, multiple distinct projects (such as ancdb and WinNativeSSH) were developed concurrently within a single 24-hour window, reaching production-ready quality.
 
 ---
 
@@ -29,9 +29,9 @@ The following two projects were developed simultaneously from scratch to a funct
 
 To maximize the AI's reasoning capabilities, technical specifications were compressed into an assembler-like symbolic format. This achieved a **15x-20x reduction in token usage**, allowing the AI to maintain the complex logic of two distinct projects within its active context without "forgetting" or hallucinating.
 
-### 3.2 Parser-less Logic (ANC-DB Principle)
+### 3.2 Structured Schema-Driven Logic
 
-By removing the SQL parsing layer, ANC-DB enables the AI to interact with data in its native "binary/structured" logic. This principle was applied to the development process itself: by providing the AI with structured schemas rather than ambiguous natural language, the **feedback loop was shortened by 90%**.
+The design philosophy of "ancdb"—eliminating intermediate parsing layers to interact directly with structured data—was applied to the development process itself. By providing the AI with high-density, structured schemas rather than ambiguous natural language (the human-language equivalent of SQL), we **eliminated semantic drift and shortened the feedback loop by 90%**.
 
 ---
 
