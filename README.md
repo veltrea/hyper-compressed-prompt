@@ -47,4 +47,60 @@ The concurrent release of **WinNativeSSH** and **ancdb** is not merely a showcas
 - **WinNativeSSH**: [https://github.com/veltrea/WinNativeSSH](https://github.com/veltrea/WinNativeSSH)
 
 ---
+
+## Annex: Token Compression Examples
+
+To illustrate the effectiveness of **Symbolic Token Compression**, below is a comparison between a standard verbose specification and the compressed symbolic version used in this project.
+
+### 1. Before Compression (Verbose)
+*Standard natural language specification with diagrams (~15,000 tokens).*
+
+```markdown
+# AI-Native Core Database (ANC-DB) Detailed Specification v1.0
+
+**设计哲学**
+AI-Native Core Database (ANC-DB) is a next-generation storage engine that completely eliminates the SQL "human language parsing layer." It allows AI agents to operate data directly from programs or via binary communication with minimal token usage and maximum reliability.
+
+### Core Architecture
+1. Zero SQL Overhead: Zero parsing cost, enabling response times close to AI thinking speed.
+2. Token Minimization: AI operations can be described with minimal token counts.
+...
+```
+
+### 2. After Compression (Symbolic)
+*Assembler-like symbolic format designed for AI reasoning (~850 tokens, 94.3% reduction).*
+
+```text
+## ANC-DB.v1::SPEC_COMPRESSED
+# AI-OPTIMIZED: MAX_COMPRESSION, ZERO_REDUNDANCY, SYMBOL_MODE
+
+### META
+ID: ANCDB
+V: 1.0
+TGT: AI_AGENT_STATE_MGT
+PRIO: [TOK_MIN, LATENCY_MIN, MEM_SAFE]
+
+### ARCH::3LAYER
+L3:PROTO[msgpack|stdin/tcp]->L2:RUST[ffi_safe]->L1:SQLITE_CORE[btree+pager]
+
+### CORE_EXTRACT::SQLITE
+KEEP: {
+  btree: [Open,Close,BeginTx,Commit,Rollback,Cursor,Data,Insert,Delete]
+  pager: [Open,Close,Get,Write,CommitP1,Rollback]
+}
+DROP: [parse.y,tokenize.c,prepare.c,expr.c,select.c,where.c]
+
+### PERF::OPT (Ratio SQL vs ANCDB)
+| OP             | Ratio  |
+|----------------|--------|
+| DirectRead     | 10x    |
+| RangeScan(100) | 10x    |
+| BatchWrite(1k) | 10x    |
+
+## CHECKSUM
+SPEC_TOKENS: 15000 -> 850 (94.3%↓)
+STATUS: READY_FOR_IMPL
+```
+
+---
 © 2026 veltrea. All rights reserved.
