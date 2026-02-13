@@ -52,12 +52,16 @@ The concurrent release of **WinNativeSSH** and **ancdb** is not merely a showcas
 
 To illustrate the effectiveness of **Symbolic Token Compression**, below are the definitive evidence files documenting the transition from verbose strategy to actual operative symbolic prompt.
 
+> [!TIP]
+> **Workflow Nuance**: The lead developer is a native Japanese speaker. The "original" specification was drafted in Japanese, and the compression was performed **directly from Japanese to symbolic tokens** (bypassing English). This direct synthesis minimizes semantic loss during compression.
+
 ### 1. Before Compression (Strategy Level)
-*Standard natural language specification with redundant terminology and complex diagrams (~15,000 tokens).*
-- **Full Evidence**: [original.md](original.md)
+*Standard verbose specification (~15,000 tokens).*
+- **Japanese (Original)**: [original.md](original.md)
+- **English (Translation)**: [original_en.md](original_en.md)
 
 ### 2. After Compression (Operative Symbolic Prompt)
-*The actual emitted (发色) prompt used for development (~850 tokens, 94.3% reduction). This format enabled the parallel synthesis of complex systems.*
+*The actual emitted (发色) prompt used for development (~850 tokens, 94.3% reduction).*
 - **Full Evidence**: [compress.md](compress.md)
 
 ---
