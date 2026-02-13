@@ -50,15 +50,15 @@ The concurrent release of **WinNativeSSH** and **ancdb** is not merely a showcas
 
 ## Annex: Token Compression Examples
 
-To illustrate the effectiveness of **Symbolic Token Compression**, below is a comparison between a standard verbose specification and the compressed symbolic version used in this project.
+To illustrate the effectiveness of **Symbolic Token Compression**, below is a comparison between a standard verbose specification and the actual compressed symbolic version used in the project (sourced from operational logs).
 
-### 1. Before Compression (Verbose)
-*Standard natural language specification with diagrams (~15,000 tokens).*
+### 1. Before Compression (Original Strategy)
+*Standard natural language specification with redundant terminology and complex diagrams (~15,000 tokens).*
 
 ```markdown
 # AI-Native Core Database (ANC-DB) Detailed Specification v1.0
 
-**设计哲学**
+**Design Philosophy**
 AI-Native Core Database (ANC-DB) is a next-generation storage engine that completely eliminates the SQL "human language parsing layer." It allows AI agents to operate data directly from programs or via binary communication with minimal token usage and maximum reliability.
 
 ### Core Architecture
@@ -67,8 +67,8 @@ AI-Native Core Database (ANC-DB) is a next-generation storage engine that comple
 ...
 ```
 
-### 2. After Compression (Symbolic)
-*Assembler-like symbolic format designed for AI reasoning (~850 tokens, 94.3% reduction).*
+### 2. After Compression (Actual Symbolic Prompt)
+*The actual emitted (发色) prompt used for development (~850 tokens, 94.3% reduction). This format enabled the parallel synthesis of complex systems.*
 
 ```text
 ## ANC-DB.v1::SPEC_COMPRESSED
@@ -79,27 +79,61 @@ ID: ANCDB
 V: 1.0
 TGT: AI_AGENT_STATE_MGT
 PRIO: [TOK_MIN, LATENCY_MIN, MEM_SAFE]
+SCALE: 1PROC_NTHREAD
 
 ### ARCH::3LAYER
 L3:PROTO[msgpack|stdin/tcp]->L2:RUST[ffi_safe]->L1:SQLITE_CORE[btree+pager]
+MEM: 50KB+200KB+500KB=750KB
 
 ### CORE_EXTRACT::SQLITE
+SRC: sqlite3.c (8MB)
+TGT: 500KB (94%↓)
+
 KEEP: {
-  btree: [Open,Close,BeginTx,Commit,Rollback,Cursor,Data,Insert,Delete]
-  pager: [Open,Close,Get,Write,CommitP1,Rollback]
+  btree: [Open,Close,BeginTx,Commit,Rollback,Cursor,MoveTo,Data,Insert,Delete,CreateTbl]
+  pager: [Open,Close,Get,Write,CommitP1,CommitP2,Rollback]
+  vfs: [Open,Close,Read,Write,Sync]
+  util: [malloc,free]
 }
-DROP: [parse.y,tokenize.c,prepare.c,expr.c,select.c,where.c]
 
-### PERF::OPT (Ratio SQL vs ANCDB)
-| OP             | Ratio  |
-|----------------|--------|
-| DirectRead     | 10x    |
-| RangeScan(100) | 10x    |
-| BatchWrite(1k) | 10x    |
+DROP: [parse.y,tokenize.c,prepare.c,expr.c,select.c,where.c,vdbe.c]
 
-## CHECKSUM
-SPEC_TOKENS: 15000 -> 850 (94.3%↓)
-STATUS: READY_FOR_IMPL
+FLAGS: -DSQLITE_OMIT_{AUTH,AUTOINIT,COMPLETE,DEPRECATED,EXPLAIN,LOAD_EXT,PROGRESS,UTF16,VTAB,WINDOW} -O3
+
+### SCHEMA::RUST
+#[derive(Schema)]
+struct T{
+  #[pk]id:u64,
+  #[idx]ts:i64,
+  aid:String,
+  #[cmp]c:Vec<u8>,
+  emb:Option<Vec<f32>>
+}
+// AUTO_GEN: btree_layout,serde,idx_meta
+
+PK_STRAT: snowflake_id(41b_ts+10b_mid+12b_seq)
+IDX_TYPE: [BTree,Hash,FullText?]
+
+### PROTO::BINARY
+FMT: [CMD:u8][SCHEMA_ID][PAYLOAD:msgpack]
+
+CMD_TABLE:
+0x01:DirectRead(tid,key)->rec
+0x02:RangeScan(tid,idx,start,end,lim,ord)->recs
+0x03:AtomicWrite(tid,key,data)->ok
+0x04:BatchWrite(tid,recs[],on_conflict)->ok
+0x05:AtomicUpdate(tid,key,delta)->ok
+0x06:Delete(tid,key)->ok
+0x10:BeginTx(iso_lvl)->txid
+0x11:CommitTx(txid)->ok
+0x12:RollbackTx(txid)->ok
+
+RESP: {st:u8,dat:bin,meta:{rows:u32,us:u32},err:str?}
+
+TOK_REDUCTION:
+SQL_INSERT(1000recs): ~1500tok, 50ms
+ANCDB_0x04: ~0tok, 5ms
+IMPROVE: 99.7%↓, 10x↑
 ```
 
 ---
