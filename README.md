@@ -19,7 +19,7 @@ This report demonstrates a paradigm shift in software engineering: the transitio
 The following two projects were developed simultaneously from scratch to a functional release state in less than one day:
 
 - **[WinNativeSSH](https://github.com/veltrea/WinNativeSSH)**: A native SSH implementation for Windows focusing on low-level system integration.
-- **[ancdb](https://github.com/veltrea/ancdb)**: A high-performance, AI-optimized storage engine that interacts directly with B-Tree structures via binary protocols, bypassing SQL overhead.
+- **[ancdb](https://github.com/veltrea/ancdb)**: A unique storage engine designed without SQL, based on the concept that structured data (binary) is inherently more efficient for AI than natural language. It presents a new paradigm for AI-native data interaction—a distinctive project worth exploring in its own right.
 
 ---
 
