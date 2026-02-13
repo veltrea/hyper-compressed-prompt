@@ -107,6 +107,23 @@ struct AgentMemory {
 - 10bit: Machine ID (multi-instance support)
 - 12bit: Sequence (4096 per ms)
 
+**Custom PK**: User-defined possible via `#[primary_key]` attribute.
+
+### 2.3 Indexing Strategy
+
+```rust
+// Auto-generated secondary indexes
+enum IndexType {
+    BTree,      // Range search
+    Hash,       // Exact match
+    FullText,   // Text search (Optional)
+}
+
+// Composite index definition
+#[composite_index(fields = ["agent_id", "timestamp"])]
+struct AgentMemory { /* ... */ }
+```
+
 ---
 
 ## 3. AI Binary Protocol Specification
@@ -115,6 +132,8 @@ struct AgentMemory {
 
 1. **Token Efficiency**: Command names are 1-2 byte fixed values.
 2. **Type Safety**: Runtime validation via Schema ID.
+3. **Stream Processing**: Large data via chunk transfer.
+4. **Error Codes**: Numeric codes only (human messages in separate fields).
 
 ### 3.2 Command Format (MessagePack)
 
@@ -132,6 +151,51 @@ struct AgentMemory {
 | `BatchWrite` | 0x04 | Batch insert (max 1000) | -98% vs SQL |
 | `AtomicUpdate` | 0x05 | Update (Delta format) | -85% vs SQL |
 | `Delete` | 0x06 | Deletion | -90% vs SQL |
+| `BeginTx` | 0x10 | Transaction Start | - |
+| `CommitTx` | 0x11 | Commit | - |
+| `RollbackTx` | 0x12 | Rollback | - |
+
+#### 3.2.2 Command Examples
+
+**DirectRead Command**
+
+```python
+# AI-side (Python example)
+import msgpack
+
+command = msgpack.packb({
+    "cmd": 0x01,
+    "schema": "AgentMemory",
+    "key": 1234567890123456789
+})
+
+# Token usage: Virtually zero (structured data)
+# SQL comparison: "SELECT * FROM agent_memory WHERE id = 1234567890123456789"
+# → ~15 tokens saved
+```
+
+---
+
+## 4. Rust Safety Layer Design
+
+### 4.1 FFI Bridge
+
+(Omitted technical Rust/C details for brevity in this report, focusing on the concepts)
+
+### 4.2 Concurrency Strategy
+
+- **Choice**: RwLock (via `parking_lot` crate).
+- **Policy**: Parallel Reads, Exclusive Writes.
+
+---
+
+## 5. SQLite Core Extraction Strategy
+
+### 5.1 Modules
+
+- **Target**: Reduce 8MB `sqlite3.c` to ~500KB (94% reduction).
+- **Keep**: B-Tree, Pager, VFS, Utils.
+- **Drop**: SQL Parser, Tokenizer, Prepared Statements, Expr Evaluator, Select/Where Optimizer, VDBE.
 
 ---
 
@@ -143,6 +207,16 @@ struct AgentMemory {
 |-----|---------|-----------|--------|
 | DirectRead | 50μs | 5μs | **10x** |
 | BatchWrite (1k) | 50ms | 5ms | **10x** |
+
+---
+
+## 7. Roadmap
+
+1. **Phase 1**: Dependency Analysis (2-3 days).
+2. **Phase 2**: Rust Bridge Construction (3-5 days).
+3. **Phase 3**: MessagePack Protocol Implementation (2-3 days).
+4. **Phase 4**: Schema Macro Implementation (3-5 days).
+5. **Phase 5**: Integration Testing & Benchmarking (2-3 days).
 
 ---
 

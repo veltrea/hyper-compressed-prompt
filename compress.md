@@ -238,7 +238,7 @@ open('minimal_functions.txt','w').write('\n'.join(sorted(min_funcs)))
 ## CHECKSUM
 SPEC_TOKENS: 15000->850 (94.3%↓)
 COMPRESSION_RATIO: 17.6x
-DECODER_TIME: <100ms (AI_parse)
+DECODE_TIME: <100ms (AI_parse)
 STATUS: READY_FOR_IMPL
 
 ## EOF

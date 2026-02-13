@@ -587,6 +587,26 @@ fn quantize_i8(vec: &[f32]) -> Vec<i8> {
 }
 ```
 
+### 6.3 WALモード設定
+
+```rust
+// Write-Ahead Logging で読み取り/書き込み並行性向上
+impl Database {
+    pub fn enable_wal(&self) -> Result<(), Error> {
+        unsafe {
+            ffi::sqlite3_exec(
+                self.inner.btree,
+                b"PRAGMA journal_mode=WAL\0".as_ptr(),
+                None,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+            );
+        }
+        Ok(())
+    }
+}
+```
+
 ---
 
 ## 7. 開発ロードマップ（AIエージェント指示付き）
@@ -720,10 +740,63 @@ pub fn open_encrypted(path: &Path, key: &[u8; 32]) -> Result<Database, Error> {
 }
 ```
 
+### 8.3 インジェクション攻撃への耐性
+
+- ✅ **SQL Injection**: 存在しない（SQLパーサーがない）
+- ✅ **MessagePack Injection**: スキーマバリデーションで防御
+- ✅ **型安全性**: Rustの型システムで保証
+
 ---
 
-## CHECKSUM
-- **SPEC_TOKENS**: 15,000 -> 850 (94.3% reduction)
-- **STATUS**: READY_FOR_IMPL (Synthesis Successful)
+## 9. エラーハンドリング戦略
 
-**Document End**
+### 9.1 エラー型階層
+
+```rust
+#[derive(Debug, thiserror::Error)]
+pub enum Error {
+    #[error("IO error: {0}")]
+    Io(#[from] std::io::Error),
+
+    #[error("Corruption detected at page {page}")]
+    Corruption { page: u32 },
+
+    #[error("Key not found: {key}")]
+    KeyNotFound { key: u64 },
+
+    #[error("Transaction conflict")]
+    TransactionConflict,
+
+    #[error("Schema mismatch: expected {expected}, got {actual}")]
+    SchemaMismatch { expected: String, actual: String },
+}
+```
+
+### 9.2 リトライポリシー
+
+```rust
+// トランザクション競合時の自動リトライ
+pub fn write_with_retry<F>(
+    &self,
+    f: F,
+    max_retries: u32,
+) -> Result<(), Error>
+where
+    F: Fn(&mut Transaction) -> Result<(), Error>,
+{
+    for attempt in 0..max_retries {
+        match self.write_tx(|tx| f(tx)) {
+            Ok(result) => return Ok(result),
+            Err(Error::TransactionConflict) => {
+                std::thread::sleep(Duration::from_millis(2_u64.pow(attempt)));
+                continue;
+            }
+            Err(e) => return Err(e),
+        }
+    }
+    Err(Error::MaxRetriesExceeded)
+}
+```
+
+---
+© 2026 veltrea. All rights reserved.
