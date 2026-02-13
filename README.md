@@ -36,6 +36,14 @@ In the synthesis process of this project, the following AI stack was strategical
 - **Compression**: **Anthropic Claude 3.5 Sonnet**. Used to transform long-form Japanese specifications into high-density symbolic prompts.
 - **Code Generation**: **OpenAI Codex** and **Google Antigravity**. These engines interpreted the compressed prompts to generate high-performance Rust, C, and C++ code with extreme speed and precision.
 
+### 3.3 Multi-Model Evaluation & Iterative Refinement
+
+To ensure the quality and security of the synthesized code, we implemented a "Cross-Model Evaluation" layer.
+
+- **Security & Bug Audit**: Immediately following generation, multiple AI models act as auditors to identify security vulnerabilities and logical bugs.
+- **Generational Evolution**: Feedback from these audits is reintegrated into the symbolic prompt. The specification undergoes 3 to 6 generations of iterative refinement to reach its final state.
+- **Outcome**: This process ensures production-grade robustness while maintaining high-density symbolic communication and minimizing manual intervention.
+
 ---
 
 ## 4. Conclusion: Strategic Value
