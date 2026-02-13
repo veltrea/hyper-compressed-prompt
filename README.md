@@ -27,18 +27,28 @@ The following two projects were developed simultaneously from scratch to a funct
 
 ## 3. Methodology
 
-### 3.1 Symbolic Token Compression
+### 3.1 AI-Native Specification Generation (Inception & Merging)
+
+The "original" specification file (`original.md`) was not handcrafted by a human.
+
+- **Conceptual Inception**: The human developer provided only the core concepts—the fundamental logic and architectural skeletal structure.
+- **Multi-AI Detail Generation**: Multiple AI models generated detailed technical specifications for individual modules based on those core concepts.
+- **AI-Driven Merging**: A separate AI agent performed a semantic and logical merge of these distributed specifications into a single, cohesive "Master Specification."
+- **Strategic Value**: By involving AI from the inception phase, we eliminate human errors and ambiguities, creating a high-purity source of truth optimized for the subsequent "compression" phase.
+
+### 3.2 Symbolic Token Compression
 
 To maximize the AI's reasoning capabilities, technical specifications were compressed into an assembler-like symbolic format. This achieved a **15x-20x reduction in token usage**, allowing the AI to maintain the complex logic of two distinct projects within its active context without "forgetting" or hallucinating. By bypassing ambiguous natural language and providing high-density structured data directly, we **eliminated semantic drift and shortened the feedback loop by 90%**.
 
-### 3.2 AI Agent Stack
+### 3.3 AI Agent Stack
 
 In the synthesis process of this project, the following AI stack was strategically utilized:
 
+- **Technical Research**: **Anthropic Corework**. Automates technical trend analysis, library selection, and low-level conceptual research.
 - **Compression**: **Anthropic Claude 3.5 Sonnet**. Used to transform long-form Japanese specifications into high-density symbolic prompts.
 - **Code Generation**: **OpenAI Codex** and **Google Antigravity**. These engines interpreted the compressed prompts to generate high-performance Rust, C, and C++ code with extreme speed and precision.
 
-### 3.3 Multi-Model Evaluation & Iterative Refinement
+### 3.4 Multi-Model Evaluation & Iterative Refinement
 
 To ensure the quality and security of the synthesized code, we implemented a "Cross-Model Evaluation" layer.
 
