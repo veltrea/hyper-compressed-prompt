@@ -27,11 +27,7 @@ The following two projects were developed simultaneously from scratch to a funct
 
 ### 3.1 Symbolic Token Compression
 
-To maximize the AI's reasoning capabilities, technical specifications were compressed into an assembler-like symbolic format. This achieved a **15x-20x reduction in token usage**, allowing the AI to maintain the complex logic of two distinct projects within its active context without "forgetting" or hallucinating.
-
-### 3.2 Structured Schema-Driven Logic
-
-The design philosophy of "ancdb"—eliminating intermediate parsing layers to interact directly with structured data—was applied to the development process itself. By providing the AI with high-density, structured schemas rather than ambiguous natural language (the human-language equivalent of SQL), we **eliminated semantic drift and shortened the feedback loop by 90%**.
+To maximize the AI's reasoning capabilities, technical specifications were compressed into an assembler-like symbolic format. This achieved a **15x-20x reduction in token usage**, allowing the AI to maintain the complex logic of two distinct projects within its active context without "forgetting" or hallucinating. By bypassing ambiguous natural language and providing high-density structured data directly, we **eliminated semantic drift and shortened the feedback loop by 90%**.
 
 ---
 
