@@ -53,33 +53,11 @@ The concurrent release of **WinNativeSSH** and **ancdb** is not merely a showcas
 To illustrate the effectiveness of **Symbolic Token Compression**, below is a comparison between the original detailed specification and the actual compressed symbolic version used in the project.
 
 ### 1. Before Compression (Original Detailed Specification)
-*A snippet of the massive natural language specification (~15,000 tokens) documenting every architectural layer and dependency.*
+*A snippet of the massive natural language specification (~15,000 tokens). The complete document can be found in [VERBOSE_SPEC.md](VERBOSE_SPEC.md).*
 
 ```markdown
 # AI-Native Core Database (ANC-DB) Detailed Specification v1.0
-
-**Executive Summary**
-ANC-DB is a next-generation storage engine that completely eliminates the SQL "human language parsing layer." It allows AI agents to operate data directly from programs or via binary communication with minimal token usage and maximum reliability.
-
-### 1. System Architecture
-#### 1.1 Three-Layer Design
-- AI Binary Protocol Layer: MessagePack/Protobuf over stdio/TCP
-- Rust Safety Layer: Memory-safe wrapper with Arc/Mutex
-- SQLite Core Engine: B-Tree (sans SQL parser), Pager (ACID), VFS (I/O)
-
-### 2. Data Model Design
-#### 2.1 Schema Definition (Rust)
-```rust
-#[derive(Schema, Serialize, Deserialize)]
-struct AgentMemory {
-    #[primary_key] id: u64,
-    #[indexed] timestamp: i64,
-    agent_id: String,
-    #[compressed] content: Vec<u8>,
-    embedding: Option<Vec<f32>>,
-}
-```
-... (continues for 20,000+ characters)
+...
 ```
 
 ### 2. After Compression (Actual Symbolic Prompt)
