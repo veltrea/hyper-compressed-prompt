@@ -1,4 +1,4 @@
-# Accelerated Software Synthesis via ANC-DB and Symbolic Token Compression
+# Accelerated Software Synthesis via Symbolic Token Compression
 > Evidence Report on Hyper-Accelerated Development Using AI Agents
 
 [![Static Badge](https://img.shields.io/badge/Status-Released-brightgreen)](#)
